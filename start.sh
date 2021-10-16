@@ -52,5 +52,5 @@ echo "grafene container ($GRAFENE_ID) running with ip $GRAFENE_IP"
 echo "-> bound to localhost at: http://127.0.0.1:3000"
 echo
 
-echo "to kill processes, run:"
+echo "to clean up containers, run:"
 echo "docker kill $SERVER_ID $PROM_ID $GRAFENE_ID"

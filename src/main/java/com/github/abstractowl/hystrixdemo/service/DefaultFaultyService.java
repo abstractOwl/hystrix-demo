@@ -10,25 +10,20 @@ import org.springframework.stereotype.Service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
-import io.micrometer.core.annotation.Counted;
-import io.micrometer.core.annotation.Timed;
-
 @Service
-public class SimpleFaultyService implements FaultyService {
-	private static final Logger LOG = LoggerFactory.getLogger(SimpleFaultyService.class);
+public class DefaultFaultyService implements FaultyService {
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultFaultyService.class);
 
 	private Random random;
 	private double successProbability;
 
 	@Autowired
-	public SimpleFaultyService(Random random, @Qualifier("successProbability") double successProbability) {
+	public DefaultFaultyService(Random random, @Qualifier("successProbability") double successProbability) {
 		this.random = new Random();
 		this.successProbability = successProbability;
 	}
 
 	@Override
-	@Counted("SimpleFaultyService.Count")
-	@Timed("SimpleFaultyService.Time")
 	@HystrixCommand(fallbackMethod = "fallback")
 	public String getResult() {
 		boolean success = random.nextFloat() < successProbability;

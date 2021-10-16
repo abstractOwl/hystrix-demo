@@ -12,27 +12,22 @@ import com.google.common.util.concurrent.RateLimiter;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
-import io.micrometer.core.annotation.Counted;
-import io.micrometer.core.annotation.Timed;
-
 @Service
-public class SimpleThrottlingService implements ThrottlingService {
-	private static final Logger LOG = LoggerFactory.getLogger(SimpleThrottlingService.class);
+public class DefaultThrottlingService implements ThrottlingService {
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultThrottlingService.class);
 	
 	private RateLimiter rateLimiter;
 	
-	public SimpleThrottlingService(RateLimiter rateLimiter) {
+	public DefaultThrottlingService(RateLimiter rateLimiter) {
 		this.rateLimiter = Objects.requireNonNull(rateLimiter);
 	}
 	
 	@Autowired
-	public SimpleThrottlingService(@Qualifier("allowedCallsPerSecond") double allowedCallsPerSecond) {
+	public DefaultThrottlingService(@Qualifier("allowedCallsPerSecond") double allowedCallsPerSecond) {
 		this(RateLimiter.create(allowedCallsPerSecond));
 	}
 
 	@Override
-	@Counted("SimpleThrottlingService.Count")
-	@Timed("SimpleThrottlingService.Time")
 	@HystrixCommand(
 			fallbackMethod = "fallback",
 			commandProperties = {
